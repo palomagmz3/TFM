@@ -1,6 +1,7 @@
 import pandas as pd
+import os
 import csv
-import hdbscan
+#import hdbscan
 import numpy as np
 
 import seaborn as sns
@@ -8,12 +9,18 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 
-import umap
+import umap.umap_ as umap
 
 from scipy.sparse.csr import csr_matrix
 from typing import List, Tuple, Dict, Union
 
-df = pd.read_csv('../bert_data/data_to_visualize/L6N20151128_cluster_20.csv', header=None)
+ROOT_DIR = os.path.abspath(os.curdir)
+DATA_DIR = os.path.join(ROOT_DIR, "bert_data")
+
+bert_output = os.path.join(DATA_DIR, "data_to_visualize/L6N20151128_cluster_11_labels.csv")
+
+df = pd.read_csv(bert_output, header=None)
+
 print(df)
 # For reproducability of the results
 np.random.seed(42)
@@ -52,7 +59,7 @@ ax.scatter(
     xs=df.loc[rndperm,:]["pca-one"],
     ys=df.loc[rndperm,:]["pca-two"],
     zs=df.loc[rndperm,:]["pca-three"],
-    c=df.loc[rndperm,:]["y"],
+    #c=df.loc[rndperm, :]["y"],
     cmap='tab10'
 )
 
@@ -69,7 +76,7 @@ ax1 = plt.subplot(1, 2, 1)
 sns.scatterplot(
     x="pca-one", y="pca-two",
     hue="y",
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3,
@@ -82,7 +89,7 @@ ax2 = plt.subplot(1, 2, 2)
 sns.scatterplot(
     x="pca-one", y="pca-three",
     hue="y",
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3,
@@ -123,7 +130,7 @@ ax.scatter(
     xs=df.loc[rndperm,:]["tsne-2d-one"],
     ys=df.loc[rndperm,:]["tsne-2d-two"],
     zs=df.loc[rndperm,:]["tsne-2d-three"],
-    c=df.loc[rndperm,:]["y"],
+    #c=df.loc[rndperm,:]["y"],
     cmap='tab10'
 )
 
@@ -141,7 +148,7 @@ sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-two",
     hue="y",
     #palette=sns.color_palette("hls", 10),
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3
@@ -158,7 +165,7 @@ sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-three",
     hue="y",
     #palette=sns.color_palette("hls", 10),
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3
@@ -172,7 +179,7 @@ ax1 = plt.subplot(1, 2, 1)
 sns.scatterplot(
     x="pca-one", y="pca-two",
     hue="y",
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3,
@@ -185,7 +192,7 @@ ax2 = plt.subplot(1, 2, 2)
 sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-two",
     hue="y",
-    palette=sns.color_palette("hls", 12),
+    palette=sns.color_palette("hls", 10),
     data=df,
     legend="full",
     alpha=0.3,
@@ -218,7 +225,7 @@ ax.scatter(
     xs=df.loc[rndperm,:]["UMAP-one"],
     ys=df.loc[rndperm,:]["UMAP-two"],
     zs=df.loc[rndperm,:]["UMAP-three"],
-    c=df.loc[rndperm,:]["y"],
+    #c=df.loc[rndperm,:]["y"],
     cmap='tab10'
 )
 
@@ -266,8 +273,8 @@ print('FIN')
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import KMeans
 
-KMean= KMeans(n_clusters=11)
+KMean= KMeans(n_clusters=12)
 KMean.fit(embeddings)
 label=KMean.predict(embeddings)
 
-print(f'Silhouette Score(n=11): {silhouette_score(embeddings, label)}')
+print(f'Silhouette Score(n=12): {silhouette_score(embeddings, label)}')

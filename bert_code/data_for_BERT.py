@@ -2,11 +2,12 @@ import re
 import os
 import pandas as pd
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_PATH, "bert_data/data_for_bert")
+ROOT_DIR = os.path.abspath(os.curdir)
+DATA_DIR = os.path.join(ROOT_DIR, "datasets")
 
-dataset_file = "/Users/palomagomez/PycharmProjects/TFM/datasets/L6N_20151128/distintivo/all.txt"
-#dataset_file = os.path.join(DATA_DIR, "datasets/L6N-20151128/distintivo/all.txt")
+BERT_DIR = os.path.join(ROOT_DIR, "bert_data/data_with_label")
+dataset_file = os.path.join(DATA_DIR, "L6N_20151128/distintivo/all.txt")
+
 def parseDataset(file):
     dataset = []
     with open(file, "r") as my_file:
@@ -92,7 +93,7 @@ def httpFilter(data):
 
 def toPandas(data):
     data_to_pandas = pd.DataFrame(data, columns= ["text"])
-    data_to_pandas.to_csv(os.path.join('/Users/palomagomez/PycharmProjects/TFM/bert_data/data_with_label', 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
+    data_to_pandas.to_csv(os.path.join(BERT_DIR, 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
 
 '''
 
@@ -150,7 +151,7 @@ def dataForBert2(data):
 
 def toPandas(data):
     data_to_pandas = pd.DataFrame(data, columns= ["label", "text"])
-    data_to_pandas.to_csv(os.path.join('/Users/palomagomez/PycharmProjects/TFM/bert_data/data_with_label', 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
+    data_to_pandas.to_csv(os.path.join(BERT_DIR, 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
 
 data_with_label = onlyTweetAndLabel(data) #para quedarnos con el tweet y el hashtag
 data_without_http = removehttp(data_with_label)

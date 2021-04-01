@@ -4,11 +4,14 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_PATH, "datasets")
 
-dataset_file= '../programas/L6N-20151024.txt'
-dataset_file2='../programas/L6N-20151031.txt'
-#dataset_file_small='L6N-20151024-1500lines.txt'
+ROOT_DIR = os.path.abspath(os.curdir)
+DATA_DIR = os.path.join(ROOT_DIR, "programas")
+
+
+dataset_file= os.path.join(DATA_DIR, "L6N-20151024.txt")
+dataset_file2= os.path.join(DATA_DIR, "L6N-20151031.txt")
+
 pandas_csv = 'out.csv'
 
 #Convertir dataset en array de frases
