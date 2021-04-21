@@ -1,4 +1,4 @@
-from bertopic import BERTopic
+#from bertopic import BERTopic
 from sklearn.datasets import fetch_20newsgroups
 import ssl
 import os
@@ -6,11 +6,27 @@ import re
 #import pandas as pd
 import itertools
 import numpy as np
-from sentence_transformers import SentenceTransformer
+import sys
+#from sentence_transformers import SentenceTransformer
 
 programa = 'L6N_20151024'
+sys.path.append('../')
+
+path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+
+cur_path = os.path.dirname(__file__)
+
+new_path = os.path.relpath(path_to_file, cur_path)
+
+dataset = []
+with open(new_path, 'r') as my_file:
+    for row in my_file:
+        # añadimos cada fila al dataset pero haciendo un split por donde está la tabulacion
+        dataset.append(row.split("\t"))
+
 
 ROOT_DIR = os.path.abspath(os.curdir)
+print(ROOT_DIR)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
 PROGRAM_DIR = os.path.join(ROOT_DIR, "programas")
 
@@ -44,7 +60,7 @@ def dataforBert(data):
         new_l.append(re.sub('\s+', '-', row))
     return new_l
 
-data = parseDataset(dataset_file)
+data = parseDataset(dataset)
 only_tweet = onlyTweet(data)
 half_data = halfData(only_tweet)
 other_half = otherhalf(only_tweet)
@@ -52,13 +68,12 @@ data_for_BERT = dataforBert(only_tweet)
 data_1half = dataforBert(half_data)
 data_2half = dataforBert(other_half)
 
-'''
+
 # Miguel model
 def defineModel(n_neighbors, min_topic_size):
     print('CREATED NEW MODEL')
     return BERTopic(language='spanish', n_neighbors=n_neighbors, min_topic_size=min_topic_size, verbose=True)
 
-'''
 
 def basicModel(data):
     topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=20, verbose=True)
@@ -78,7 +93,9 @@ def modelEmbeddings(data_1half, data_2half):
     embeddings_1half = sentence_model.encode(data_1half, show_progress_bar=True)
     embeddings_2half = sentence_model.encode(data_2half, show_progress_bar=True)
     # Create topic model
-    topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
+    #topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
+    topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=10,
+                           verbose=True)
     topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))
     # Update topics
     new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=11)
@@ -108,8 +125,8 @@ probs = [[0, 0, 0.009, 0.147],
 
 def writeFile(matrix):
     mat = np.matrix(matrix)
-    file_path = 'bert_data/data_from_bert/' + programa + '.txt'
-    path = os.path.join(ROOT_DIR, file_path)
+    file_path = '../bert_data/data_from_bert/' + programa + '.txt'
+    path = os.path.relpath(file_path, cur_path)
     #with open('bert_data/data_from_bert/output.txt', 'wb') as file:
     with open(path, 'wb') as file:
         for line in mat:
