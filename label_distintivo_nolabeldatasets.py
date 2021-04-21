@@ -157,7 +157,7 @@ def refinehashtagsL6N20151107(label):
             new = '#L6Niglesias24h'
             lista_aux.append(new)
         else:
-            labelsplit.remove(labelsplit[l])
+            labelsplit.remove(l)
     return ','.join(lista_aux)
 
 
@@ -196,13 +196,8 @@ def toPandas(data):
 
 def generateSplits(data):
     data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
-    train, test = train_test_split(data, test_size=0.3)
     data.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151107/distintivo', 'all.txt'), index=False, header=None, sep='\t', doublequote=False)
-    train.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151107/distintivo', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
-    test.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151107/distintivo', 'test.txt'), index=False, header=None, sep='\t')
+        DATA_DIR, 'L6N_20151107/distintivo', 'L6N_20151107-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
 
 '''
 
@@ -224,7 +219,7 @@ dataFinalLabeled = labelsdata(hashtags_L6N20151107, dataRefined) #Cambiar el pri
 
 
 # Llamadas para generear los datasets
-#df = toPandas(dataFinalLabeled)
-#print(df)
-#generateSplits(df)
+df = toPandas(dataFinalLabeled)
+print(df)
+generateSplits(df)
 

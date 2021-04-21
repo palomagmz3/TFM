@@ -273,7 +273,7 @@ print('FIN')
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import KMeans
 
-KMean= KMeans(n_clusters=12)
+KMean=KMeans(n_clusters=12)
 KMean.fit(embeddings)
 label=KMean.predict(embeddings)
 

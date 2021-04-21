@@ -3,10 +3,11 @@ import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_PATH, "datasets")
+ROOT_DIR = os.path.abspath(os.curdir)
+PROGRAMS_DIR = os.path.join(ROOT_DIR, "programas")
+DATA_DIR = os.path.join(ROOT_DIR, "datasets")
 
-dataset_file = "programas/L6N-20151128.txt"
+dataset_file = os.path.join(PROGRAMS_DIR, "L6N-20160123.txt")
 
 from labels_enfoques import hashtags_L6N20151024, \
     hashtags_L6N20151114, \
@@ -87,6 +88,9 @@ def labelsdata (hashtagsprogram, data):
         row[1] = label(hashtagsprogram, row[1])
     return data
 
+'''
+
+'''
 def toPandas(data):
     return pd.DataFrame(data, columns= ["number", "label", "text"])
 
@@ -95,12 +99,13 @@ def generateSplits(data):
     data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
     train, test = train_test_split(data, test_size=0.3)
     data.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151128/distintivo', 'all.txt'), index=False, header=None, sep='\t', doublequote=False)
-    train.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151128/distintivo', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
-    test.to_csv(os.path.join(
-        DATA_DIR, 'L6N-20151128/distintivo', 'test.txt'), index=False, header=None, sep='\t')
-
+        DATA_DIR, 'L6N_20160123/distintivo', 'L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
+    '''
+        train.to_csv(os.path.join(
+            DATA_DIR, 'L6N-20151128/distintivo', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
+        test.to_csv(os.path.join(
+            DATA_DIR, 'L6N-20151128/distintivo', 'test.txt'), index=False, header=None, sep='\t')
+        '''
 '''
 
 Aquí empiezan las llamadas a las funciones que hemos definido
@@ -114,9 +119,8 @@ dataMerged = mergeUserTweet(dateRemoved)
 dataNoHashtag = datasetWithoutHashtag(dataMerged)
 dataNoQuote = datasetWithoutQuotationMarks(dataNoHashtag)
 dataNoEnter = datasetWithoutEnter(dataNoQuote)
-dataLabeled = labelsdata(hashtags_L6N20151128, dataNoEnter) #Cambiar el primer parámetro
+dataLabeled = labelsdata(hashtags_L6N20160123, dataNoEnter) #Cambiar el primer parámetro
 
 # Llamadas para generear los datasets
 df = toPandas(dataLabeled)
-#print(df)
 generateSplits(df)

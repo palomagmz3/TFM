@@ -5,7 +5,7 @@ Este archivo de python es de pruebas para leer líneas de datasets y comprobar q
 training/validation/test que creó Ricardo con su código a partir del csv COVID-DEMO.csv
 '''
 
-dataset_l6n = 'datasets/L6N-20151024/training.txt'
+dataset_l6n = 'datasets/L6N_20151024/training.txt'
 dataset_covid = 'datasets/COVID-DEMO/training.txt'
 
 def readL6N (file):

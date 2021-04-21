@@ -1,6 +1,14 @@
 import re
+import os
+import pandas as pd
 
-dataset_file = "programas/L6N-20151031.txt"
+programa = 'L6N-20151226' #un programa de L6N
+
+ROOT_DIR = os.path.abspath(os.curdir)
+PROGRAM_DIR = os.path.join(ROOT_DIR, "programas")
+DATA_DIR = os.path.join(ROOT_DIR, "datasets")
+dataset_path = programa + '.txt'
+dataset_file = os.path.join(PROGRAM_DIR, dataset_path)
 
 from labels_enfoques import labels_organizativo
 
@@ -30,6 +38,14 @@ def datasetWithoutHashtag(data):
         row[2] = hashtagFilter(row[2])
     return data
 
+def quotationMarksFilter(sentence):
+    return sentence.replace("'", '').replace('"', '')
+
+def datasetWithoutQuotationMarks(data):
+    for row in data:
+        row[2] = quotationMarksFilter(row[2])
+    return data
+
 def enterFilter(sentence):
     return sentence.replace('\n', '')
 
@@ -39,22 +55,33 @@ def datasetWithoutEnter(data):
     return data
 
 def label (name, data):
-    file = name.split('/')
     label = ''
     for key in labels_organizativo:
-        if (file[1] == key):
+        if (name == key):
             label = labels_organizativo[key]
+        else:
+            continue
     for row in data:
         row[1] = label
     return data
+
+def toPandas(data):
+    return pd.DataFrame(data, columns= ["number", "label", "text"])
+
+def generate_splits(data):
+    data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
+    dir_name = programa.replace('-', '_')
+    path = 'organizativo/all/' + dir_name + '-ALL.txt'
+    data.to_csv(os.path.join(DATA_DIR, path), index=False, header=None, sep='\t', doublequote=False)
 
 dataparse = parseDataset(dataset_file)
 dateRemoved = datetimeRemoval(dataparse)
 dataMerged = mergeUserTweet(dateRemoved)
 dataFilteredHashtag = datasetWithoutHashtag(dataMerged)
-dataFilteredEnter = datasetWithoutEnter(dataFilteredHashtag)
-dataLabeled = label(dataset_file, dataFilteredEnter)
+dataFilteredQuotes = datasetWithoutQuotationMarks(dataFilteredHashtag)
+dataFilteredEnter = datasetWithoutEnter(dataFilteredQuotes)
+dataLabeled = label(programa, dataFilteredEnter)
+df = toPandas(dataLabeled)
+generate_splits(df)
 
-for row in dataLabeled:
-    print(row)
 

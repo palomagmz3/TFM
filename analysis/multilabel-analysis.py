@@ -7,7 +7,7 @@ DATA_DIR = os.path.join(ROOT_DIR, "programas")
 
 dataset_file= os.path.join(DATA_DIR, "L6N-20160123.txt")
 dataset_file2= os.path.join(DATA_DIR, "L6N-20160102.txt")
-dataset_file3= os.path.join(DATA_DIR, "L6N-20151121.txt")
+dataset_file3= os.path.join(DATA_DIR, "L6N_20151121.txt")
 
 '''
 Este archivo de python es para analizar las filas de los documentos de la L6N que tienen varios hashtags asociados

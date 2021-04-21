@@ -4,9 +4,10 @@ import pandas as pd
 
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
+BERT_DIR = os.path.join(ROOT_DIR, "bert_data/data_for_bert")
+LABEL_DIR = os.path.join(ROOT_DIR, "bert_data/data_with_label")
 
-BERT_DIR = os.path.join(ROOT_DIR, "bert_data/data_with_label")
-dataset_file = os.path.join(DATA_DIR, "L6N_20151128/distintivo/all.txt")
+dataset_file = os.path.join(DATA_DIR, "L6N_20151031/distintivo/L6N_20151031-ALL.txt")
 
 def parseDataset(file):
     dataset = []
@@ -93,7 +94,7 @@ def httpFilter(data):
 
 def toPandas(data):
     data_to_pandas = pd.DataFrame(data, columns= ["text"])
-    data_to_pandas.to_csv(os.path.join(BERT_DIR, 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
+    data_to_pandas.to_csv(os.path.join(BERT_DIR, 'L6N_20151024.txt'), index=False, header=None, sep='\t', doublequote=False)
 
 '''
 
@@ -103,9 +104,9 @@ Aquí empiezan las llamadas a las funciones que hemos definido
 
 data = parseDataset(dataset_file)
 data_only_tweet = onlyTweet(data)
-data_without_http = removehttp(data_only_tweet)
-data_for_BERT = dataForBert2(data_without_http)
-#toPandas(data_for_BERT)
+#data_without_http = removehttp(data_only_tweet)
+#data_for_BERT = dataForBert1(data_without_http)
+toPandas(data_only_tweet)
 
 '''
 
@@ -151,13 +152,15 @@ def dataForBert2(data):
 
 def toPandas(data):
     data_to_pandas = pd.DataFrame(data, columns= ["label", "text"])
-    data_to_pandas.to_csv(os.path.join(BERT_DIR, 'L6N-20151128.txt'), index=False, header=None, sep='\t', doublequote=False)
+    data_to_pandas.to_csv(os.path.join(LABEL_DIR, 'L6N_20151031.txt'), index=False, header=None, sep='\t', doublequote=False)
 
 data_with_label = onlyTweetAndLabel(data) #para quedarnos con el tweet y el hashtag
 data_without_http = removehttp(data_with_label)
 data_bert_with_hashtag = dataForBert2(data_without_http)
-toPandas(data_bert_with_hashtag)
-for row in data_bert_with_hashtag:
-    print(row)
+toPandas(data_with_label)
 
-print(len(data_bert_with_hashtag))
+
+if (len(data_with_label)==len(data_only_tweet)):
+    print(True)
+else:
+    print(False)

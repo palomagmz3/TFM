@@ -9,8 +9,8 @@ ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "programas")
 
 
-dataset_file= os.path.join(DATA_DIR, "L6N-20151024.txt")
-dataset_file2= os.path.join(DATA_DIR, "L6N-20151031.txt")
+dataset_file= os.path.join(DATA_DIR, "L6N_20151024.txt")
+dataset_file2= os.path.join(DATA_DIR, "L6N_20151031.txt")
 
 pandas_csv = 'out.csv'
 
@@ -220,13 +220,13 @@ def generateSplits(data):
     # DATA_DIR = 'datasets/' (carpeta datasets)
     # IMPORTANTE: guardar estos datasets con ESTOS NOMBRES
     data.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151024', 'all.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
     train.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151024', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
     #validation.to_csv(os.path.join(
-        #DATA_DIR, 'L6N-20151024', 'validation.txt'), index=False, header=None, sep='\t', doublequote=False)
+        #DATA_DIR, 'L6N_20151024', 'validation.txt'), index=False, header=None, sep='\t', doublequote=False)
     test.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151024', 'test.txt'), index=False, header=None, sep='\t')
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'test.txt'), index=False, header=None, sep='\t')
 
 generateSplits(df)
 
@@ -242,12 +242,12 @@ def generateSplits2(data):
     # DATA_DIR = 'datasets/' (carpeta datasets)
     # IMPORTANTE: guardar estos datasets con ESTOS NOMBRES
     data.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151031', 'all.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
     train.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151031', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
     #validation.to_csv(os.path.join(
-        #DATA_DIR, 'L6N-20151024', 'validation.txt'), index=False, header=None, sep='\t', doublequote=False)
+        #DATA_DIR, 'L6N_20151024', 'validation.txt'), index=False, header=None, sep='\t', doublequote=False)
     test.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N-20151031', 'test.txt'), index=False, header=None, sep='\t')
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'test.txt'), index=False, header=None, sep='\t')
 
 generateSplits2(df2)

@@ -1,20 +1,20 @@
 
 #etiquetas que se van a usar en cada uno de los datasets para el enfoque aglomerativo
 
-labels_organizativo = {'L6N-20151024.txt': '#L6Nbarómetro',
-'L6N-20151031.txt': '#L6Nretocatalán',
-'L6N-20151107.txt': '#L6Ncallerivera',
-'L6N-20151114.txt': '#L6Njesuisparis',
-'L6N-20151121.txt': '#L6Ncalleiglesias',
-'L6N-20151128.txt': '#L6Ncallepsánchez',
-'L6N-20151205.txt': '#L6Ncallerajoy',
-'L6N-20151212.txt': '#L6Ncampaña20D',
-'L6N-20151219.txt': '#L6Ncuentatrás20D',
-'L6N-20151226.txt': '#L6Nresacaelectoral',
-'L6N-20160102.txt': '#L6Npactómetro',
-'L6N-20160109.txt': '#L6Nnoupresident',
-'L6N-20160116.txt': '#L6Ntictacpactos',
-'L6N-20160123.txt': '#L6Npresidudas'}
+labels_organizativo = {'L6N-20151024': '#L6Nbarómetro',
+'L6N-20151031': '#L6Nretocatalán',
+'L6N-20151107': '#L6Ncallerivera',
+'L6N-20151114': '#L6Njesuisparis',
+'L6N-20151121': '#L6Ncalleiglesias',
+'L6N-20151128': '#L6Ncallepsánchez',
+'L6N-20151205': '#L6Ncallerajoy',
+'L6N-20151212': '#L6Ncampaña20D',
+'L6N-20151219': '#L6Ncuentatrás20D',
+'L6N-20151226': '#L6Nresacaelectoral',
+'L6N-20160102': '#L6Npactómetro',
+'L6N-20160109': '#L6Nnoupresident',
+'L6N-20160116': '#L6Ntictacpactos',
+'L6N-20160123': '#L6Npresidudas'}
 
 #etiquetas según la prioridad en cada programa para el enfoque distintivo
 hashtags_L6N20151024 = {'#L6Ncasado': 8,

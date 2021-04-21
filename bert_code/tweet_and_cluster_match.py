@@ -6,7 +6,7 @@ ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "bert_data")
 
 tweets_dataset = os.path.join(DATA_DIR, "data_for_bert/L6N-20151128.txt")
-bert_output = os.path.join(DATA_DIR, "data_from_bert_processed/L6N20151128_cluster_11.csv")
+bert_output = os.path.join(DATA_DIR, "data_from_bert_processed/L6N20151128_cluster_20.csv")
 tweets_with_label = os.path.join(DATA_DIR, "data_with_label/L6N-20151128.txt")
 
 
@@ -72,6 +72,7 @@ def get_max_label(data):
         else:
             dict[row[1]] = 1
     max_key = max(dict, key=lambda key: dict[key])
+    #print(dict)
     return max_key
 
 def automatch(data, topics):
@@ -108,18 +109,24 @@ def to_visualize(bert_data, labeled_data):
 
 def toCSV(data):
     df = pd.DataFrame(data)
-    df.to_csv(os.path.join(DATA_DIR, 'data_to_visualize/L6N20151128_cluster_11_labels.csv'), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
+    df.to_csv(os.path.join(DATA_DIR, 'data_to_visualize/L6N20151128_cluster_20_labels.csv'), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
 
 tweets_topics_bert = parseDataset(tweets_dataset)
 bert_output = parseDataset(bert_output)
 topics = topics(bert_output)
 tweets_bert_and_labels = join(tweets_real_labels, bert_output)
 tweets_bert_labels = automatch(tweets_bert_and_labels, topics)
+
+'''
+IMPORTANTE: cada vez que se utilice este script para un programa hay que ejecutar las 4 líneas de abajo de dos en dos:
+primero las dos primeras y se comentan y luego las dos siguientes. TIENE QUE HABER UN PAR DE LAS LÍNEAS SIEMPRE COMENTADO
+'''
 #bert_visualize = to_visualize(bert_output, tweets_bert_labels)
+#toCSV(bert_visualize)
 
 labels_visualize = to_visualize(bert_output, tweets_real_labels)
-
 toCSV(labels_visualize)
+
 
 
 '''
