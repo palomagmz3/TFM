@@ -26,7 +26,6 @@ with open(new_path, 'r') as my_file:
 
 
 ROOT_DIR = os.path.abspath(os.curdir)
-print(ROOT_DIR)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
 PROGRAM_DIR = os.path.join(ROOT_DIR, "programas")
 
