@@ -12,38 +12,17 @@ import sys
 programa = 'L6N_20151024'
 sys.path.append('../')
 
-path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+path_to_file = '../bert_data/data_for_bert' + programa + '.txt'
 
 cur_path = os.path.dirname(__file__)
 
-new_path = os.path.relpath(path_to_file, cur_path)
-
-dataset = []
-with open(new_path, 'r') as my_file:
-    for row in my_file:
-        # añadimos cada fila al dataset pero haciendo un split por donde está la tabulacion
-        dataset.append(row.split("\t"))
-
-
-ROOT_DIR = os.path.abspath(os.curdir)
-DATA_DIR = os.path.join(ROOT_DIR, "datasets")
-PROGRAM_DIR = os.path.join(ROOT_DIR, "programas")
-
-dataset_path = programa + '/distintivo/' + programa +'-ALL.txt'
-dataset_file = os.path.join(DATA_DIR, dataset_path)
+dataset = os.path.relpath(path_to_file, cur_path)
 
 def parseDataset(file):
     dataset = []
     with open(file, "r") as my_file:
         for row in my_file:
-            #añadimos cada fila al dataset pero haciendo un split por donde está la tabulacion
             dataset.append(row.split("\t"))
-    return dataset
-
-def onlyTweet(data):
-    dataset = []
-    for row in data:
-        dataset.append(row[2])
     return dataset
 
 def halfData(data):
@@ -60,13 +39,13 @@ def dataforBert(data):
     return new_l
 
 data = parseDataset(dataset)
-only_tweet = onlyTweet(data)
-half_data = halfData(only_tweet)
-other_half = otherhalf(only_tweet)
-data_for_BERT = dataforBert(only_tweet)
+half_data = halfData(data)
+other_half = otherhalf(data)
+data_for_BERT = dataforBert(data)
 data_1half = dataforBert(half_data)
 data_2half = dataforBert(other_half)
 
+print('Se han preparado los datos')
 
 # Miguel model
 def defineModel(n_neighbors, min_topic_size):
@@ -82,7 +61,6 @@ def basicModel(data):
     new_topics, new_probs = topic_model.reduce_topics(data, topics, probs, nr_topics=11)
     print(topic_model.get_topics())
 
-
 #Create model with custom embeddings
 def modelEmbeddings(data_1half, data_2half):
     sentence_model = SentenceTransformer("distilbert-base-nli-mean-tokens")
@@ -91,12 +69,16 @@ def modelEmbeddings(data_1half, data_2half):
     sentence_model = SentenceTransformer("dccuchile/bert-base-spanish-wwm-uncased")
     embeddings_1half = sentence_model.encode(data_1half, show_progress_bar=True)
     embeddings_2half = sentence_model.encode(data_2half, show_progress_bar=True)
+    print('Embeddings hechos')
     # Create topic model
     #topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
-    topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=10,
-                           verbose=True)
+    topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=10, low_memory=True, calculate_probabilities=False, verbose=True)
+    print('Se ha cargado el modelo con BERTopic y los parámetros')
+    topic_model.save("my_model")
+    print('Empieza primer fit ttransform')
     topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))
     # Update topics
+    print('Se actualizan los topics')
     new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=11)
     print(topic_model.get_topics())
     return new_topics, new_probs
@@ -108,20 +90,6 @@ def matrix(topics, probs):
         matrix[i].append(probs[i])
     return matrix
 
-'''
-topics = [22, 6, -1, 22, -1, 6, 38, 56, 38, -1]
-probs = [[0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-[0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-[0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-       [0, 0, 0.009, 0.147],
-[0, 0, 0.009, 0.147]]
-'''
-
 def writeFile(matrix):
     mat = np.matrix(matrix)
     file_path = '../bert_data/data_from_bert/' + programa + '.txt'
@@ -131,8 +99,14 @@ def writeFile(matrix):
         for line in mat:
             np.savetxt(file, line, fmt='%s')
 
-topics, probs = modelEmbeddings(data_1half, data_2half)
-mat = matrix(topics, probs)
-print(mat)
-writeFile(mat)
+def writeTopics(topics):
+    file_path = '../bert_data/data_from_bert/' + programa + '.txt'
+    path = os.path.relpath(file_path, cur_path)
+    with open(path, 'w') as file:
+        for item in topics:
+            file.write("%s\n" % item)
 
+topics, probs = modelEmbeddings(data_1half, data_2half)
+#mat = matrix(topics, probs)
+#writeFile(mat)
+writeTopics(topics)
