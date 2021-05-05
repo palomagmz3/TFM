@@ -66,7 +66,7 @@ def basicModel(data):
 
 #Create model with custom embeddings
 def modelEmbeddings(data_1half, data_2half):
-    sentence_model = SentenceTransformer("distilbert-base-nli-mean-tokens")
+    #sentence_model = SentenceTransformer("distilbert-base-nli-mean-tokens")
 
     #Más potente
     sentence_model = SentenceTransformer("dccuchile/bert-base-spanish-wwm-uncased")
@@ -101,7 +101,7 @@ def matrix(topics, probs):
 
 def writeFile(matrix):
     mat = np.matrix(matrix)
-    file_path = '../bert_data/data_from_bert/' + programa + 'topics_and_probs.txt'
+    file_path = '../bert_data/data_from_bert/' + programa + '_topics_and_probs.txt'
     path = os.path.relpath(file_path, cur_path)
     #with open('bert_data/data_from_bert/output.txt', 'wb') as file:
     with open(path, 'wb') as file:
