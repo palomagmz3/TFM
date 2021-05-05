@@ -1,4 +1,4 @@
-#from bertopic import BERTopic
+from bertopic import BERTopic
 from sklearn.datasets import fetch_20newsgroups
 import ssl
 import os
@@ -7,12 +7,15 @@ import re
 import itertools
 import numpy as np
 import sys
-#from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+print('TOKENIZERS_PARALLELISM=', os.environ['TOKENIZERS_PARALLELISM'])
 
 programa = 'L6N_20151024'
 sys.path.append('../')
 
-path_to_file = '../bert_data/data_for_bert' + programa + '.txt'
+path_to_file = '../bert_data/data_for_bert/' + programa + '.txt'
 
 cur_path = os.path.dirname(__file__)
 
@@ -68,20 +71,26 @@ def modelEmbeddings(data_1half, data_2half):
     #Más potente
     sentence_model = SentenceTransformer("dccuchile/bert-base-spanish-wwm-uncased")
     embeddings_1half = sentence_model.encode(data_1half, show_progress_bar=True)
+    print('Primera mitad de los datos procesados...')
     embeddings_2half = sentence_model.encode(data_2half, show_progress_bar=True)
     print('Embeddings hechos')
     # Create topic model
     #topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
-    topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=10, low_memory=True, calculate_probabilities=False, verbose=True)
+    topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=100, nr_topics=20, low_memory=True, calculate_probabilities=True, verbose=True)
     print('Se ha cargado el modelo con BERTopic y los parámetros')
-    topic_model.save("my_model")
+    #topic_model.save("my_model")
+
     print('Empieza primer fit ttransform')
-    topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))
-    # Update topics
-    print('Se actualizan los topics')
-    new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=11)
+    topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))    # Update topics
+    #print(np.concatenate((embeddings_1half, embeddings_2half)))
+    print('Termina fit transform')
+    #print('Se actualizan los topics')
+    #new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=11)
     print(topic_model.get_topics())
-    return new_topics, new_probs
+
+    topic_model.save("my_model")
+
+    return topics, probs
 
 def matrix(topics, probs):
     matrix = []
@@ -92,7 +101,7 @@ def matrix(topics, probs):
 
 def writeFile(matrix):
     mat = np.matrix(matrix)
-    file_path = '../bert_data/data_from_bert/' + programa + '.txt'
+    file_path = '../bert_data/data_from_bert/' + programa + 'topics_and_probs.txt'
     path = os.path.relpath(file_path, cur_path)
     #with open('bert_data/data_from_bert/output.txt', 'wb') as file:
     with open(path, 'wb') as file:
@@ -107,6 +116,7 @@ def writeTopics(topics):
             file.write("%s\n" % item)
 
 topics, probs = modelEmbeddings(data_1half, data_2half)
-#mat = matrix(topics, probs)
-#writeFile(mat)
-writeTopics(topics)
+mat = matrix(topics, probs)
+writeFile(mat)
+#writeTopics(topics)
+
