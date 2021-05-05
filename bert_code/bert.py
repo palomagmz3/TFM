@@ -84,13 +84,13 @@ def modelEmbeddings(data_1half, data_2half):
     topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))    # Update topics
     #print(np.concatenate((embeddings_1half, embeddings_2half)))
     print('Termina fit transform')
-    #print('Se actualizan los topics')
-    #new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=11)
+    print('Se actualizan los topics')
+    new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=15)
     print(topic_model.get_topics())
 
     topic_model.save("my_model")
 
-    return topics, probs
+    return new_topics, new_probs
 
 def matrix(topics, probs):
     matrix = []
