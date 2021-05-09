@@ -3,16 +3,17 @@ import pandas as pd
 import os
 import sys
 
-programa = 'L6N_20151024'
+#programa = 'L6N_20151024'
 sys.path.append('../')
+cur_path = os.path.dirname(__file__)
 
+'''
 ROOT_DIR = os.path.abspath(os.curdir)
 path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
 cur_path = os.path.dirname(__file__)
 
 dataset_file = os.path.relpath(path_to_file, cur_path)
-
-
+'''
 def parseDataset(file):
     dataset = []
     with open(file, "r") as my_file:
@@ -26,43 +27,28 @@ def onlyTweetAndLabel(data):
         dataset.append(row[1])
     return dataset
 
-def removehttpttweet(tweet):
-    tweet_split = tweet.split(' ')
-    new_tweet_split = []
-    for item in tweet_split:
-        if (re.match('(ht+)', item) or item == ''):
-            continue
-        else:
-            new_tweet_split.append(item)
-    return ' '.join(new_tweet_split)
+def to_visualize(bert_data, labeled_data):
+    # Salida es lo mismo que sale de Bert pero la primera columna ya no es un número de topic sino un hashtag
+    # Usamos el método tanto para la etiqueta nueva de Bert como para la original
+    if (len(bert_data) != len(labeled_data)):
+        print('El tamaño de los tweets y la salida de bert no coincide!!')
+    else:
+        for i in range(len(labeled_data)):
+            list = []
+            list.append(labeled_data[i])
+            new_row = labeled_data[i] + ',' + ','.join(bert_data[i].split(',')[1:])
+            bert_data[i] = new_row
+    return bert_data
 
-# Método para quitar la parte http de todos los tweets
-def removehttp(data):
-    for row in data:
-        row[1] = removehttpttweet(row[1])
-    return data
-
-#Elegir este método para eliminar las filas repetidas (las que tienen RT)
-def dataForBert2(data):
-    dataset = []
-    for row in data:
-        tweet_split = row[1].split(' ')
-        if (len(tweet_split) == 1):
-            continue
-        elif (tweet_split[1] == 'RT'):
-            continue
-        else:
-            row[1]=' '.join(tweet_split[1:])
-            dataset.append(row)
-    return dataset
-
-def toPandas(data):
-    file_path = '../bert_data/data_with_label/' + programa + '.txt'
-    data_to_pandas = pd.DataFrame(data, columns= ["label", "text"])
+def toPandas(data, programa):
+    file_path = '../bert_data/data_to_visualize/' + programa + '-orig_labels.csv'
+    data_to_pandas = pd.DataFrame(data)
     data_to_pandas.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False)
 
+'''
 dataset = parseDataset(dataset_file)
 data_with_label = onlyTweetAndLabel(dataset) #para quedarnos con el tweet y el hashtag
 #data_without_http = removehttp(data_with_label)
 #data_bert_with_hashtag = dataForBert2(data_without_http)
 #toPandas(data_with_label)
+'''

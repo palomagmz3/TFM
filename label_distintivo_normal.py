@@ -88,9 +88,6 @@ def labelsdata (hashtagsprogram, data):
         row[1] = label(hashtagsprogram, row[1])
     return data
 
-'''
-
-'''
 def toPandas(data):
     return pd.DataFrame(data, columns= ["number", "label", "text"])
 

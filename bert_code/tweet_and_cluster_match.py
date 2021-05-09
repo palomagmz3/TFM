@@ -1,23 +1,23 @@
 import os
 import pandas as pd
 import csv
+import sys
 
-ROOT_DIR = os.path.abspath(os.curdir)
-DATA_DIR = os.path.join(ROOT_DIR, "bert_data")
+from only_labels import parseDataset, onlyTweetAndLabel, to_visualize, toPandas
 
-tweets_dataset = os.path.join(DATA_DIR, "data_for_bert/L6N-20151128.txt")
-bert_output = os.path.join(DATA_DIR, "data_from_bert_processed/L6N20151128_cluster_20.csv")
-tweets_with_label = os.path.join(DATA_DIR, "data_with_label/L6N-20151128.txt")
+programa = 'L6N_20151024'
+sys.path.append('../')
 
+#paths to files: tweets (bert input), bert_output (topics and probs) and labels
+cur_path = os.path.dirname(__file__)
+tweets_file_path = '../bert_data/data_for_bert/' + programa + '.txt'
+tweets_file = os.path.relpath(tweets_file_path, cur_path)
+labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+labels_file = os.path.relpath(labels_path, cur_path)
+bert_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
+bert_file = os.path.relpath(bert_path, cur_path)
 
-def parseDataset(file):
-    dataset = []
-    with open(file, "r") as my_file:
-        for row in my_file:
-            dataset.append(row.split("\t"))
-    return dataset
-
-tweets_real_labels = parseDataset(tweets_with_label)
+labels = onlyTweetAndLabel(parseDataset(labels_file))
 
 def parseDataset(file):
     dataset = []
@@ -29,6 +29,9 @@ def parseDataset(file):
     except:
         print('No se puede leer el archivo')
     return dataset
+
+bert_output = parseDataset(bert_file)
+toPandas(to_visualize(bert_output, labels), programa)
 
 def topics(bert_output):
     list = []
@@ -50,8 +53,7 @@ def join (hashtags, bert_output):
             list = []
             bert_output_split = bert_output[i].split(',')
             list.append(bert_output_split[0])
-            list.append(hashtags[i][0])
-            list.append(hashtags[i][1])
+            list.append(hashtags[i])
             data.append(list)
     return data
 
@@ -99,7 +101,7 @@ def to_visualize(bert_data, labeled_data):
         for i in range(len(labeled_data)):
             list = []
             list.append(labeled_data[i][0])
-            new_row = labeled_data[i][0] + bert_data[i][1:]
+            new_row = labeled_data[i][0] + ',' + ','.join(bert_data[i].split(',')[1:])
             n = new_row.split(',')
             if(n[0][-1].isdigit() == True):
                 n[0] = n[0][:-1]
@@ -108,26 +110,18 @@ def to_visualize(bert_data, labeled_data):
     return bert_data
 
 def toCSV(data):
+    file_path = '../bert_data/data_to_visualize/' + programa + '-bert_label.csv'
     df = pd.DataFrame(data)
-    df.to_csv(os.path.join(DATA_DIR, 'data_to_visualize/L6N20151128_cluster_20_labels.csv'), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
+    df.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
 
-tweets_topics_bert = parseDataset(tweets_dataset)
-bert_output = parseDataset(bert_output)
+
+bert_output = parseDataset(bert_file)
 topics = topics(bert_output)
-tweets_bert_and_labels = join(tweets_real_labels, bert_output)
+tweets_bert_and_labels = join(labels, bert_output)
 tweets_bert_labels = automatch(tweets_bert_and_labels, topics)
 
-'''
-IMPORTANTE: cada vez que se utilice este script para un programa hay que ejecutar las 4 líneas de abajo de dos en dos:
-primero las dos primeras y se comentan y luego las dos siguientes. TIENE QUE HABER UN PAR DE LAS LÍNEAS SIEMPRE COMENTADO
-'''
-#bert_visualize = to_visualize(bert_output, tweets_bert_labels)
-#toCSV(bert_visualize)
-
-labels_visualize = to_visualize(bert_output, tweets_real_labels)
-toCSV(labels_visualize)
-
-
+bert_visualize = to_visualize(bert_output, tweets_bert_labels)
+toCSV(bert_visualize)
 
 '''
 
@@ -157,11 +151,11 @@ def getY(tweets):
         y.append(row[0])
     return y
 
-y_expected = getY(tweets_real_labels)
-y_predicted = getY(tweets_bert_labels)
+y_expected = labels
+y_predicted = tweets_bert_labels
 from sklearn import metrics
 
-results(tweets_real_labels, tweets_bert_labels)
+results(labels, tweets_bert_labels)
 print(f'Accuracy = {metrics.accuracy_score(y_expected, y_predicted)}')
 print(metrics.classification_report(y_expected, y_predicted))
 print(metrics.confusion_matrix(y_expected, y_predicted))

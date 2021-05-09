@@ -2,14 +2,23 @@ import os
 import pandas as pd
 import numpy as np
 import csv
-programa = 'L6N_20151024' #un programa de L6N
+programa = 'L6N_20160123' #un programa de L6N
+enfoque = '/aglomerativo/' #distintivo
 n = '1' #un número del 1 al 5 (listas kfold)
 t = 'TEST' #TRAIN o TEST
 
+def name_file(enfoque):
+    if enfoque == '/aglomerativo/':
+        return '_AGLO'
+    elif enfoque == '/distintivo/':
+        return ''
+    else:
+        print('El enfoque especificado no existe!!')
+
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
-rt_path = programa + '/distintivo/' + programa +'-RT.txt'
-k_fold_path = programa + '/kfold_lists/orig/' + programa + '_ORIG_FOLD-0' + n + '_of_05-' + t + '.txt'
+rt_path = programa + enfoque + programa +'-RT.txt'
+k_fold_path = programa + enfoque + 'kfold_lists/orig/' + programa + name_file(enfoque) + '_ORIG_FOLD-0' + n + '_of_05-' + t + '.txt'
 
 rt = os.path.join(DATA_DIR, rt_path)
 kfold_list= os.path.join(DATA_DIR, k_fold_path)
@@ -85,7 +94,7 @@ def join(df_flags, k_fold, rts):
     return k_fold
 
 def newFold(data):
-    path = programa + '/kfold_lists/complete/' + programa + '_ORIG_MAS_RT_FOLD-0' + n + '_of_05-' + t + '.txt'
+    path = programa + enfoque + 'kfold_lists/complete/' + programa + name_file(enfoque) + '_ORIG_MAS_RT_FOLD-0' + n + '_of_05-' + t + '.txt'
     data.to_csv(os.path.join(
         DATA_DIR, path), index=False, header=None, sep='\t', doublequote=False)
 

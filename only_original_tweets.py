@@ -2,12 +2,14 @@ import os
 import pandas as pd
 import re
 
-programa = 'L6N_20151107'
-rt = False #True
+programa = 'L6N_20151226'
+rt = True #False
+enfoque = '/aglomerativo/' #'/distintivo/'
+
 
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
-dataset_path = programa + '/distintivo/' + programa +'-ALL.txt'
+dataset_path = programa + enfoque + programa +'-ALL.txt'
 dataset_file = os.path.join(DATA_DIR, dataset_path)
 
 def parseDataset(file):
@@ -52,7 +54,7 @@ def toPandas(data):
 
 def generateSplits(data, rt):
     label = 'ORIG' if rt == False else 'RT'
-    path = programa + '/distintivo/' + programa + '-' + label + '.txt'
+    path = programa + enfoque + programa + '-' + label + '.txt'
     data.to_csv(os.path.join(
         DATA_DIR, path), index=False, header=None, sep='\t', doublequote=False)
 
