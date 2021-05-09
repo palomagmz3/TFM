@@ -1,4 +1,6 @@
 from bertopic import BERTopic
+import nltk
+from nltk.corpus import stopwords
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer
 import ssl
@@ -77,7 +79,7 @@ def modelEmbeddings(data_1half, data_2half):
     embeddings_2half = sentence_model.encode(data_2half, show_progress_bar=True)
     print('Embeddings hechos')
     print('Defiición de modelo vectorial para quitar las stopwords')
-    vectorizer_model = CountVectorizer(ngram_range=(1, 2), stop_words="spanish")
+    vectorizer_model = CountVectorizer(ngram_range=(1, 2), stop_words=stopwords.words('spanish'))
     # Create topic model
     #topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
     topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=100, nr_topics=20, low_memory=True, calculate_probabilities=True, vectorizer_model=vectorizer_model, verbose=True)
@@ -85,7 +87,7 @@ def modelEmbeddings(data_1half, data_2half):
     #topic_model.save("my_model")
 
     print('Empieza primer fit ttransform')
-    topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))    # Update topics
+    topics, probs = topic_model.fit_transform(data_1half + data_2half, np.concatenate((embeddings_1half, embeddings_2half)))
     print('Termina fit transform')
     #print('Se actualizan los topics')
     #new_topics, new_probs = topic_model.reduce_topics(data_1half + data_2half, topics, probs, nr_topics=15)
