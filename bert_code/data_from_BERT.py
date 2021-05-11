@@ -5,11 +5,11 @@ import os
 import sys
 import numpy as np
 
-programa = 'L6N_20151024'
+programa = 'L6N_20151031'
 sys.path.append('../')
 
 cur_path = os.path.dirname(__file__)
-path = '../bert_data/data_from_bert/' + programa + 'topics_and_probs.txt'
+path = '../bert_data/data_from_bert/' + programa + '_topics_and_probs.txt'
 dataset_file = os.path.relpath(path, cur_path)
 
 def parseDataset(file):

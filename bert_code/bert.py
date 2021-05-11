@@ -16,7 +16,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 print('TOKENIZERS_PARALLELISM=', os.environ['TOKENIZERS_PARALLELISM'])
 
-programa = 'L6N_20151024'
+programa = 'L6N_20151031'
 sys.path.append('../')
 
 path_to_file = '../bert_data/data_for_bert/' + programa + '.txt'
@@ -79,7 +79,7 @@ def modelEmbeddings(data_1half, data_2half):
     embeddings_2half = sentence_model.encode(data_2half, show_progress_bar=True)
     print('Embeddings hechos')
     print('Defiición de modelo vectorial para quitar las stopwords')
-    vectorizer_model = CountVectorizer(ngram_range=(1, 2), stop_words=stopwords.words('spanish'))
+    vectorizer_model = CountVectorizer(ngram_range=(1, 1), stop_words=stopwords.words('spanish'))
     # Create topic model
     #topic_model = BERTopic(language='spanish', top_n_words=20, nr_topics=topic_reduction, min_topic_size=10, verbose=True)
     topic_model = BERTopic(language='spanish', top_n_words=20, min_topic_size=100, nr_topics=20, low_memory=True, calculate_probabilities=True, vectorizer_model=vectorizer_model, verbose=True)
