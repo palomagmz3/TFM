@@ -44,7 +44,7 @@ def replacer(row):
     return ', '.join(row_split)
 
 def refine_dots(x):
-    if (x.endswith('.')):
+    if (x.endswith('.') or x.endswith(',')):
         x = x[:-1]
     return x
 
