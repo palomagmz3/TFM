@@ -46,6 +46,8 @@ def replacer(row):
 def refine_dots(x):
     if (x.endswith('.') or x.endswith(',')):
         x = x[:-1]
+    elif (x.endswith(' ')):
+        x = ','.join(x.split(',')[:-1])
     return x
 
 def process_with_pandas(dataset):
