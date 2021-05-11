@@ -36,6 +36,7 @@ def flag(string):
 
 def replacer(row):
     row = row.replace('0. ', '0 ')
+    row = row.replace('1. ', '1 ')
     row = row.replace(' ]', ']')
     row = re.sub(r'[\[\]\(\):,]', r'', row)
     row = re.sub(r'(\s){2,}', r' ', row)
