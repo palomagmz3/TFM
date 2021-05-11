@@ -1,12 +1,19 @@
 import os
 import glob
 
+enfoque = 'aglomerativo' #distintivo
+orig_o_rt = 'ORIG' #RT
+
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
-path_input = os.path.join(DATA_DIR, "aglomerativo/all/*.txt")
+
+files_path = 'ALL/' + enfoque + '/*' + orig_o_rt  + '.txt'
+path_input = os.path.join(DATA_DIR, files_path)
 read_files = glob.glob(path_input)
 
-path_output = os.path.join(DATA_DIR, "aglomerativo/all/ALL.txt")
+name = 'DIST' if enfoque == 'distintivo' else 'AGLO'
+path = 'ALL/' + enfoque + '/L6N_ALL' + '_' + name + '_' + orig_o_rt + '.txt'
+path_output = os.path.join(DATA_DIR, path)
 with open(path_output, "wb") as outfile:
     for f in read_files:
         with open(f, "rb") as infile:

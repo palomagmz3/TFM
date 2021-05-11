@@ -2,10 +2,10 @@ import os
 import pandas as pd
 import numpy as np
 import csv
-programa = 'L6N_20160123' #un programa de L6N
+programa = 'L6N_20151205' #un programa de L6N
 enfoque = '/aglomerativo/' #distintivo
 n = '1' #un número del 1 al 5 (listas kfold)
-t = 'TEST' #TRAIN o TEST
+t = 'TRAIN' #TRAIN o TEST
 
 def name_file(enfoque):
     if enfoque == '/aglomerativo/':

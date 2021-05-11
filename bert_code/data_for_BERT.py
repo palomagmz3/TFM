@@ -3,7 +3,7 @@ import os
 import sys
 import pandas as pd
 
-programa = 'L6N_20151024'
+programa = 'L6N_20151031'
 sys.path.append('../')
 
 ROOT_DIR = os.path.abspath(os.curdir)
