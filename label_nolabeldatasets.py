@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from labels_enfoques import hashtags_L6N20151031, hashtags_L6N20151107
 
 programa = 'L6N-20151107'
-enfoque = '/aglomerativo/' #distintivo
+enfoque = '/distintivo/' #aglomerativo
 
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
@@ -231,7 +231,7 @@ def toPandas(data):
 def generateSplits(data):
     data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
     dir_name = programa.replace('-', '_')
-    path = dir_name + enfoque + dir_name + '-ALL.txt'
+    path = dir_name + enfoque + dir_name + '-L6N_ALL.txt'
     data.to_csv(os.path.join(DATA_DIR, path), index=False, header=None, sep='\t', doublequote=False)
 '''
 

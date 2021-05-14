@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import csv
+import sys
 #import hdbscan
 import numpy as np
 
@@ -14,10 +15,14 @@ import umap.umap_ as umap
 from scipy.sparse.csr import csr_matrix
 from typing import List, Tuple, Dict, Union
 
-ROOT_DIR = os.path.abspath(os.curdir)
-DATA_DIR = os.path.join(ROOT_DIR, "bert_data")
+programa = 'L6N_20151024' #cambiar el programa
+bert_or_orig = 'bert' #orig
 
-bert_output = os.path.join(DATA_DIR, "data_to_visualize/L6N20151128_cluster_11_labels.csv")
+sys.path.append('../')
+
+cur_path = os.path.dirname(__file__)
+path = '../bert_data/data_to_visualize/' + programa + '-' + bert_or_orig + '_labels.csv'
+bert_output = os.path.relpath(path, cur_path)
 
 df = pd.read_csv(bert_output, header=None)
 
@@ -49,6 +54,9 @@ pca = PCA(n_components=3)
 pca_result = pca.fit_transform(embeddings)
 df = df.drop(columns=0)
 df['y'] = classes
+n_labels = df['y'].nunique()
+print(n_labels)
+
 df['pca-one'] = pca_result[:,0]
 df['pca-two'] = pca_result[:,1]
 df['pca-three'] = pca_result[:,2]
@@ -76,7 +84,7 @@ ax1 = plt.subplot(1, 2, 1)
 sns.scatterplot(
     x="pca-one", y="pca-two",
     hue="y",
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
     alpha=0.3,
@@ -89,7 +97,7 @@ ax2 = plt.subplot(1, 2, 2)
 sns.scatterplot(
     x="pca-one", y="pca-three",
     hue="y",
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
     alpha=0.3,
@@ -148,10 +156,11 @@ sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-two",
     hue="y",
     #palette=sns.color_palette("hls", 10),
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
-    alpha=0.3
+    alpha=0.3,
+    ax=ax1
 )
 
 #print(df['tsne-2d-one'])
@@ -165,10 +174,11 @@ sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-three",
     hue="y",
     #palette=sns.color_palette("hls", 10),
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
-    alpha=0.3
+    alpha=0.3,
+    ax=ax2
 )
 '''for i in range(df.shape[0]):
     plt.text(x=df['tsne-2d-one'][i], y=df['tsne-2d-three'][i], s=classes[i])
@@ -179,7 +189,7 @@ ax1 = plt.subplot(1, 2, 1)
 sns.scatterplot(
     x="pca-one", y="pca-two",
     hue="y",
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
     alpha=0.3,
@@ -192,7 +202,7 @@ ax2 = plt.subplot(1, 2, 2)
 sns.scatterplot(
     x="tsne-2d-one", y="tsne-2d-two",
     hue="y",
-    palette=sns.color_palette("hls", 10),
+    palette=sns.color_palette("hls", n_labels),
     data=df,
     legend="full",
     alpha=0.3,

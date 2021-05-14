@@ -9,7 +9,7 @@ enfoque = '/aglomerativo/' #'/distintivo/'
 
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "datasets")
-dataset_path = programa + enfoque + programa +'-ALL.txt'
+dataset_path = programa + enfoque + programa +'-L6N_ALL.txt'
 dataset_file = os.path.join(DATA_DIR, dataset_path)
 
 def parseDataset(file):

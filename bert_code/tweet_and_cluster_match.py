@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import csv
 import sys
+import seaborn as sns
+import numpy as np
 
 from only_labels import parseDataset, onlyTweetAndLabel, to_visualize, toPandas
 
@@ -12,7 +14,7 @@ sys.path.append('../')
 cur_path = os.path.dirname(__file__)
 tweets_file_path = '../bert_data/data_for_bert/' + programa + '.txt'
 tweets_file = os.path.relpath(tweets_file_path, cur_path)
-labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
 labels_file = os.path.relpath(labels_path, cur_path)
 bert_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
 bert_file = os.path.relpath(bert_path, cur_path)
@@ -110,7 +112,7 @@ def to_visualize(bert_data, labeled_data):
     return bert_data
 
 def toCSV(data):
-    file_path = '../bert_data/data_to_visualize/' + programa + '-bert_label.csv'
+    file_path = '../bert_data/data_to_visualize/' + programa + '-bert_labels.csv'
     df = pd.DataFrame(data)
     df.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
 
@@ -118,10 +120,14 @@ def toCSV(data):
 bert_output = parseDataset(bert_file)
 topics = topics(bert_output)
 tweets_bert_and_labels = join(labels, bert_output)
+a = get_tweets_for_each_topic(tweets_bert_and_labels, '-1')
+
 tweets_bert_labels = automatch(tweets_bert_and_labels, topics)
 
 bert_visualize = to_visualize(bert_output, tweets_bert_labels)
 toCSV(bert_visualize)
+
+
 
 '''
 
@@ -144,6 +150,14 @@ def results(tweets_original_labels, tweets_after_bert):
                 fallos +=1
     print(f'aciertos: {aciertos} fallos: {fallos} de un dataset de longitud: {len(tweets_original_labels)}')
 
+def get_categories(labels):
+    categories = []
+    for row in labels:
+        if row in categories:
+            continue
+        else:
+            categories.append(row)
+    return categories
 
 def getY(tweets):
     y = []
@@ -152,10 +166,26 @@ def getY(tweets):
     return y
 
 y_expected = labels
+
 y_predicted = tweets_bert_labels
+categories = get_categories(labels)
+
 from sklearn import metrics
+import matplotlib.pyplot as plt
+
 
 results(labels, tweets_bert_labels)
-print(f'Accuracy = {metrics.accuracy_score(y_expected, y_predicted)}')
+#print(f'Accuracy = {metrics.accuracy_score(y_expected, y_predicted)}')
 print(metrics.classification_report(y_expected, y_predicted))
-print(metrics.confusion_matrix(y_expected, y_predicted))
+cf_matrix = metrics.confusion_matrix(y_expected, y_predicted)
+print(cf_matrix)
+ax = plt.subplot()
+sns.set(font_scale=0.8)
+sns.heatmap(cf_matrix, annot=True, xticklabels=categories, yticklabels=categories, fmt='g')
+ax.tick_params(axis='both', which='major', labelsize=10)
+plt.show()
+
+#sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, xticklabels=categories, yticklabels=categories,
+            #fmt='.2%', cmap='YlGnBu')
+#plt.show()
+

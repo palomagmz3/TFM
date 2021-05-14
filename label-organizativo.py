@@ -127,7 +127,7 @@ def toPandas(data):
 def generate_splits(data):
     data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
     dir_name = programa.replace('-', '_')
-    path = dir_name + '/aglomerativo/' + dir_name + '-ALL.txt'
+    path = dir_name + '/aglomerativo/' + dir_name + '-L6N_ALL.txt'
     data.to_csv(os.path.join(DATA_DIR, path), index=False, header=None, sep='\t', doublequote=False)
 
 dataparse = parseDataset(dataset_file)

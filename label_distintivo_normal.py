@@ -96,7 +96,7 @@ def generateSplits(data):
     data["name"] = ["dummy_name" + str(i) for i in range(len(data))]
     train, test = train_test_split(data, test_size=0.3)
     data.to_csv(os.path.join(
-        DATA_DIR, 'L6N_20160123/distintivo', 'L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
+        DATA_DIR, 'L6N_20160123/distintivo', 'L6N_20160123-L6N_ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
     '''
         train.to_csv(os.path.join(
             DATA_DIR, 'L6N-20151128/distintivo', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)

@@ -220,7 +220,7 @@ def generateSplits(data):
     # DATA_DIR = 'datasets/' (carpeta datasets)
     # IMPORTANTE: guardar estos datasets con ESTOS NOMBRES
     data.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-L6N_ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
     train.to_csv(os.path.join(
         '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151024', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
     #validation.to_csv(os.path.join(
@@ -242,7 +242,7 @@ def generateSplits2(data):
     # DATA_DIR = 'datasets/' (carpeta datasets)
     # IMPORTANTE: guardar estos datasets con ESTOS NOMBRES
     data.to_csv(os.path.join(
-        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
+        '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'L6N_20151024-L6N_20151205-L6N_20151212-L6N_20151219-L6N_20151226-L6N_20160102-L6N_20160109-L6N_20160116-L6N_20160123-L6N_ALL.txt'), index=False, header=None, sep='\t', doublequote=False)
     train.to_csv(os.path.join(
         '/Users/palomagomez/PycharmProjects/TFM/datasets', 'L6N_20151031', 'training.txt'), index=False, header=None, sep='\t', doublequote=False)
     #validation.to_csv(os.path.join(

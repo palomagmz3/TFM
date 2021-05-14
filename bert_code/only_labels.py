@@ -9,7 +9,7 @@ cur_path = os.path.dirname(__file__)
 
 '''
 ROOT_DIR = os.path.abspath(os.curdir)
-path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
 cur_path = os.path.dirname(__file__)
 
 dataset_file = os.path.relpath(path_to_file, cur_path)

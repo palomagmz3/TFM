@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import csv
-programa = 'L6N_20151205' #un programa de L6N
+programa = 'L6N_20151024' #un programa de L6N
 enfoque = '/aglomerativo/' #distintivo
 n = '1' #un número del 1 al 5 (listas kfold)
 t = 'TRAIN' #TRAIN o TEST
