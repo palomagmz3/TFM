@@ -2,10 +2,19 @@ import os
 import pandas as pd
 import numpy as np
 import csv
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--enfoque', type=str, required=True, help='Elegir enfoque: /algomerativo/ o /distintivo/')
+
+parser.add_argument('--n_k_fold', type=str, required=True, help='Número de lista. Elegir entre 1, 2, 3, 4 ó 5')
+parser.add_argument('--t_k_fold', type=str, required=True, help='Elegir tipo de lista: TRAIN o TEST')
+args = parser.parse_args()
+
 programa = 'L6N_ALL' #un programa de L6N
-enfoque = '/aglomerativo/' #distintivo
-n = '1' #un número del 1 al 5 (listas kfold)
-t = 'TRAIN' #TRAIN o TEST
+enfoque = args.enfoque #distintivo
+n = args.n_k_fold #un número del 1 al 5 (listas kfold)
+t = args.t_k_fold #TRAIN o TEST
 
 def name_file(enfoque):
     if enfoque == '/aglomerativo/':
