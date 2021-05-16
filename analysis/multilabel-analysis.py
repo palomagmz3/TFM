@@ -1,13 +1,22 @@
 
 import re
 import os
+import sys
 
+programa = 'L6N-20151107'
 ROOT_DIR = os.path.abspath(os.curdir)
 DATA_DIR = os.path.join(ROOT_DIR, "programas")
+sys.path.append('../')
 
-dataset_file= os.path.join(DATA_DIR, "L6N-20160123.txt")
-dataset_file2= os.path.join(DATA_DIR, "L6N-20160102.txt")
-dataset_file3= os.path.join(DATA_DIR, "L6N_20151121.txt")
+ROOT_DIR = os.path.abspath(os.curdir)
+path_to_file = '../Fernando/' + programa + '.txt'
+cur_path = os.path.dirname(__file__)
+
+dataset_file = os.path.relpath(path_to_file, cur_path)
+
+#dataset_file= os.path.join(DATA_DIR, "L6N-20160123.txt")
+#dataset_file2= os.path.join(DATA_DIR, "L6N-20160102.txt")
+#dataset_file3= os.path.join(DATA_DIR, "L6N_20151121.txt")
 
 '''
 Este archivo de python es para analizar las filas de los documentos de la L6N que tienen varios hashtags asociados
@@ -16,7 +25,6 @@ def parseDataset(file):
     dataset = []
     with open(file, "r") as my_file:
         for row in my_file:
-            #añadimos cada fila al dataset pero haciendo un split por donde está la tabulacion
             dataset.append(row.split("\t"))
     return dataset
 
@@ -42,6 +50,7 @@ def multilabelDataset (file):
     return dataset
 
 datafiltered = multilabelDataset(parse)
+print(len(datafiltered))
 
 '''
 A partir de aquí se realiza un análisis de los hashtags para buscar patrones
