@@ -3,11 +3,13 @@ import os
 import sys
 import pandas as pd
 
-programa = 'L6N_20160123'
+programa = 'L6N_ALL'
+enfoque = 'aglomerativo' #'distintivo'
 sys.path.append('../')
 
 ROOT_DIR = os.path.abspath(os.curdir)
-path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
+name_enfoque = 'DIST' if enfoque == 'distintivo' else 'AGLO'
+path_to_file = '../datasets/' + programa + '/' + enfoque + '/' + programa + '_' + name_enfoque + '_ORIG.txt'
 cur_path = os.path.dirname(__file__)
 
 dataset_file = os.path.relpath(path_to_file, cur_path)
@@ -96,7 +98,7 @@ def httpFilter(data):
     return dataset
 
 def toPandas(data):
-    file_path = '../bert_data/data_for_bert/' + programa + '.txt'
+    file_path = '../bert_data/data_for_bert/' + programa + '_' + name_enfoque + '.txt'
     data_to_pandas = pd.DataFrame(data, columns= ["text"])
     data_to_pandas.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False)
 

@@ -6,9 +6,15 @@ Script de python para analizar y etiquetar los dos programas de La Sexta Noche q
 '''
 
 import re
+import os
+import sys
 
-file_L6N20151031= '../programas/L6N-20151031.txt'
-file_L6N20151107= '../programas/L6N-20151107.txt'
+programa = 'L6N-20151107'
+sys.path.append('../')
+
+cur_path = os.path.dirname(__file__)
+path = '../programas/' + programa + '.txt'
+dataset_file = os.path.relpath(path, cur_path)
 
 
 def parseDataset(file):
@@ -55,7 +61,7 @@ def mergeUserTweet(data):
 
 # Aquí empiezan las llamadas para procesar el dataset
 
-parse = parseDataset(file_L6N20151031)
+parse = parseDataset(dataset_file)
 dateRemoved = datetimeRemoval(parse)
 dataLabeled = addLabel(dateRemoved)
 dataMerged = mergeUserTweet(dataLabeled)

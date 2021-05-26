@@ -7,14 +7,14 @@ import numpy as np
 
 from only_labels import parseDataset, onlyTweetAndLabel, to_visualize, toPandas
 
-programa = 'L6N_20151024'
+programa = 'L6N_20151107'
 sys.path.append('../')
 
 #paths to files: tweets (bert input), bert_output (topics and probs) and labels
 cur_path = os.path.dirname(__file__)
 tweets_file_path = '../bert_data/data_for_bert/' + programa + '.txt'
 tweets_file = os.path.relpath(tweets_file_path, cur_path)
-labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
+labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
 labels_file = os.path.relpath(labels_path, cur_path)
 bert_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
 bert_file = os.path.relpath(bert_path, cur_path)
@@ -76,7 +76,7 @@ def get_max_label(data):
         else:
             dict[row[1]] = 1
     max_key = max(dict, key=lambda key: dict[key])
-    #print(dict)
+    print(dict)
     return max_key
 
 def automatch(data, topics):
@@ -120,7 +120,7 @@ def toCSV(data):
 bert_output = parseDataset(bert_file)
 topics = topics(bert_output)
 tweets_bert_and_labels = join(labels, bert_output)
-a = get_tweets_for_each_topic(tweets_bert_and_labels, '-1')
+#a = get_tweets_for_each_topic(tweets_bert_and_labels, '-1')
 
 tweets_bert_labels = automatch(tweets_bert_and_labels, topics)
 
