@@ -6,7 +6,13 @@ import sys
 #programa = 'L6N_20151024'
 sys.path.append('../')
 cur_path = os.path.dirname(__file__)
-
+'''
+programa = 'L6N_ALL'
+enfoque = 'aglomerativo'
+name_enfoque = 'DIST' if enfoque == 'distintivo' else 'AGLO'
+path_to_file = '../datasets/' + programa + '/' + enfoque +'/' + programa + '_' + name_enfoque + '_ORIG.txt'
+dataset_file = os.path.relpath(path_to_file, cur_path)
+'''
 '''
 ROOT_DIR = os.path.abspath(os.curdir)
 path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
@@ -24,6 +30,7 @@ def parseDataset(file):
 def onlyTweetAndLabel(data):
     dataset = []
     for row in data:
+        #dataset.append(row[1:-1])
         dataset.append(row[1])
     return dataset
 
@@ -42,6 +49,7 @@ def to_visualize(bert_data, labeled_data):
 
 def toPandas(data, programa):
     file_path = '../bert_data/data_to_visualize/' + programa + '-orig_labels.csv'
+    #file_path = '../bert_data/data_for_bert/' + programa + '_'+ name_enfoque +'-orig_labels.txt'
     data_to_pandas = pd.DataFrame(data)
     data_to_pandas.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False)
 
@@ -51,4 +59,10 @@ data_with_label = onlyTweetAndLabel(dataset) #para quedarnos con el tweet y el h
 #data_without_http = removehttp(data_with_label)
 #data_bert_with_hashtag = dataForBert2(data_without_http)
 #toPandas(data_with_label)
+'''
+'''
+dataset = parseDataset(dataset_file)
+data_with_label = onlyTweetAndLabel(dataset) #para quedarnos con el tweet y el hashtag
+#data_bert_with_hashtag = to_visualize(data_with_label)
+toPandas(data_with_label, programa=programa)
 '''
