@@ -6,20 +6,7 @@ import sys
 #programa = 'L6N_20151024'
 sys.path.append('../')
 cur_path = os.path.dirname(__file__)
-'''
-programa = 'L6N_ALL'
-enfoque = 'aglomerativo'
-name_enfoque = 'DIST' if enfoque == 'distintivo' else 'AGLO'
-path_to_file = '../datasets/' + programa + '/' + enfoque +'/' + programa + '_' + name_enfoque + '_ORIG.txt'
-dataset_file = os.path.relpath(path_to_file, cur_path)
-'''
-'''
-ROOT_DIR = os.path.abspath(os.curdir)
-path_to_file = '../datasets/' + programa + '/distintivo/' + programa + '-L6N_ALL.txt'
-cur_path = os.path.dirname(__file__)
 
-dataset_file = os.path.relpath(path_to_file, cur_path)
-'''
 def parseDataset(file):
     dataset = []
     with open(file, "r") as my_file:
@@ -30,8 +17,35 @@ def parseDataset(file):
 def onlyTweetAndLabel(data):
     dataset = []
     for row in data:
-        #dataset.append(row[1:-1])
-        dataset.append(row[1])
+        if (row[1] == '#L6Nanticorrupción' or row[1] == '#L6Ncorruptelas' or row[1] == '#L6Ncorruptos' or row[1] == '#L6Nyoconfieso'):
+            label = '#L6Ncorrupción'
+            dataset.append(label)
+        elif (row[1] == '#L6Nantiyihadismo' or row[1] == '#L6Nmachismo' or row[1] == '#L6Nataquekabul'):
+            label = '#L6Njesuisparis'
+            dataset.append(label)
+        elif (row[1] == '#L6Nayudasocial' or row[1] == '#L6Nretoempleo' or row[1] == '#L6Nretoeduación' or row[1] == '#L6Nsueldos' or row[1] == '#L6Nsinluz' or row[1] == '#L6Npizarraempleo' or row[1] == '#L6Npizarrasparo' or row[1] == '#L6Npizarrapensiones' or row[1] == '#L6Nprecioluz'):
+            label = '#L6Nreto'
+            dataset.append(label)
+        elif (row[1] == '#L6Nbarómetro' or row[1] == '#L6Nbunbury' or row[1] == '#L6Nvotorogado' or row[1] == '#L6Npactómetro' or row[1] == '#L6Nresacaelectoral' or row[1] == '#L6Ncampaña20D' or row[1] == '#L6Nencampaña' or row[1] == '#L6Nobjetivo20D' or row[1] == '#L6Ntictacpactos' or row[1] == '#L6Npresidudas' or row[1] == '#L6Nnoupresident' or row[1] == '#L6Npablopineda' or row[1] == '#L6Nalerta' or row[1] == '#L6Ncongreso' or row[1] =='#L6Ncuentatrás20D' or row[1] == '#L6Nlíopactos'):
+            label = '#L6Nelecciones'
+            dataset.append(label)
+        elif (row[1] == '#L6Niglesias24h'):
+            label = '#L6Ncalleiglesias'
+            dataset.append(label)
+        elif (row[1] == '#L6Nrivera24h'):
+            label = '#L6Ncallerivera'
+            dataset.append(label)
+        elif (row[1] == '#L6Nsánchez24h'):
+            label = '#L6Ncallepsánchez'
+            dataset.append(label)
+        elif (row[1] == '#L6Ncuptalunya' or row[1] == '#L6Ndesafíocat' or row[1] == '#L6Nelclanpujol' or row[1] == '#L6Nmasmordidas' or row[1] == '#L6Nretocatalán'):
+            label = '#L6Ncataluña'
+            dataset.append(label)
+        elif (row[1] == '#L6NfranKO'):
+            label = '#L6Nfranquismo'
+            dataset.append(label)
+        else:
+            dataset.append(row[1])
     return dataset
 
 def to_visualize(bert_data, labeled_data):
@@ -41,28 +55,12 @@ def to_visualize(bert_data, labeled_data):
         print('El tamaño de los tweets y la salida de bert no coincide!!')
     else:
         for i in range(len(labeled_data)):
-            list = []
-            list.append(labeled_data[i])
             new_row = labeled_data[i] + ',' + ','.join(bert_data[i].split(',')[1:])
             bert_data[i] = new_row
     return bert_data
 
-def toPandas(data, programa):
-    file_path = '../bert_data/data_to_visualize/' + programa + '-orig_labels.csv'
+def toPandas(data, programa, n, e):
+    file_path = '../bert_data/data_to_visualize/' + programa + e + n + '-orig_labels.csv'
     #file_path = '../bert_data/data_for_bert/' + programa + '_'+ name_enfoque +'-orig_labels.txt'
     data_to_pandas = pd.DataFrame(data)
     data_to_pandas.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False)
-
-'''
-dataset = parseDataset(dataset_file)
-data_with_label = onlyTweetAndLabel(dataset) #para quedarnos con el tweet y el hashtag
-#data_without_http = removehttp(data_with_label)
-#data_bert_with_hashtag = dataForBert2(data_without_http)
-#toPandas(data_with_label)
-'''
-'''
-dataset = parseDataset(dataset_file)
-data_with_label = onlyTweetAndLabel(dataset) #para quedarnos con el tweet y el hashtag
-#data_bert_with_hashtag = to_visualize(data_with_label)
-toPandas(data_with_label, programa=programa)
-'''

@@ -7,16 +7,25 @@ import numpy as np
 
 from only_labels import parseDataset, onlyTweetAndLabel, to_visualize, toPandas
 
-programa = 'L6N_20151107'
+program_name = 'L6N_ALL'
+enfoque = 'distintivo' #aglomerativo o distintivo
+num_topics = 110
+embeddings = False #True o False
+
+enfoque_name = 'AGLO' if enfoque=='aglomerativo' else 'DIST'
+programa = 'L6N_ALL' + '_' + enfoque_name
+
+e = '_embeddings' if embeddings==True else ''
+n = '' if num_topics =='' else '_' + str(num_topics)
 sys.path.append('../')
 
 #paths to files: tweets (bert input), bert_output (topics and probs) and labels
 cur_path = os.path.dirname(__file__)
-tweets_file_path = '../bert_data/data_for_bert/' + programa + '.txt'
+tweets_file_path = '../bert_data/data_for_bert/' + programa +'.txt'
 tweets_file = os.path.relpath(tweets_file_path, cur_path)
-labels_path = '../datasets/' + programa + '/distintivo/' + programa + '-ALL.txt'
+labels_path = '../datasets/' + program_name + '/' + enfoque + '/' + programa  + '_ORIG.txt'
 labels_file = os.path.relpath(labels_path, cur_path)
-bert_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
+bert_path = '../bert_data/data_from_bert_processed/' + programa  + e + n +'.csv'
 bert_file = os.path.relpath(bert_path, cur_path)
 
 labels = onlyTweetAndLabel(parseDataset(labels_file))
@@ -33,7 +42,7 @@ def parseDataset(file):
     return dataset
 
 bert_output = parseDataset(bert_file)
-toPandas(to_visualize(bert_output, labels), programa)
+toPandas(to_visualize(bert_output, labels), programa, n, e)
 
 def topics(bert_output):
     list = []
@@ -76,7 +85,7 @@ def get_max_label(data):
         else:
             dict[row[1]] = 1
     max_key = max(dict, key=lambda key: dict[key])
-    print(dict)
+    #print(dict)
     return max_key
 
 def automatch(data, topics):
@@ -112,7 +121,7 @@ def to_visualize(bert_data, labeled_data):
     return bert_data
 
 def toCSV(data):
-    file_path = '../bert_data/data_to_visualize/' + programa + '-bert_labels.csv'
+    file_path = '../bert_data/data_to_visualize/' + programa + e + n + '-bert_labels.csv'
     df = pd.DataFrame(data)
     df.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
 
@@ -179,6 +188,8 @@ results(labels, tweets_bert_labels)
 print(metrics.classification_report(y_expected, y_predicted))
 cf_matrix = metrics.confusion_matrix(y_expected, y_predicted)
 print(cf_matrix)
+file_path = '../bert_data/data_to_visualize/' + programa + e + n +'_cfmatrix.csv'
+pd.DataFrame(cf_matrix).to_csv(os.path.relpath(file_path, cur_path))
 ax = plt.subplot()
 sns.set(font_scale=0.8)
 sns.heatmap(cf_matrix, annot=True, xticklabels=categories, yticklabels=categories, fmt='g')

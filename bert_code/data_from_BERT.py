@@ -5,21 +5,18 @@ import os
 import sys
 import numpy as np
 
-programa = 'L6N_20151031'
+programa = 'L6N_ALL_AGLO'
+num_topics = 100
+embeddings = True
+
+e = '_embeddings' if embeddings==True else ''
+n = '' if num_topics =='' else '_' + str(num_topics)
 sys.path.append('../')
 
 cur_path = os.path.dirname(__file__)
-path = '../bert_data/data_from_bert/' + programa + '_topics_and_probs.txt'
+path = '../bert_data/data_from_bert/' + programa + '_topics_and_probs' + e + n + '.txt'
+print(path)
 dataset_file = os.path.relpath(path, cur_path)
-
-def parseDataset(file):
-    dataset = []
-    with open(file, "r") as my_file:
-        for row in my_file:
-            #añadimos cada fila al dataset pero haciendo un split por donde está la tabulacion
-            row = row.replace('\n', '')
-            dataset.append(row)
-    return dataset
 
 def flag(string):
     flag = 0
@@ -73,34 +70,8 @@ def process_with_pandas(dataset):
     df['new_seq'] = df['new_seq'].apply(lambda x: replacer(x))
     df['new_seq'] = df['new_seq'].apply(lambda x: refine_dots(x))
     df.drop('join', inplace=True, axis=1)
-    file_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
+    file_path = '../bert_data/data_from_bert_processed/' + programa + e + n +'.csv'
     df.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
     print('Fin. Ya está el csv listo')
 
-def processDatasetWords(data):
-    dataset = []
-    for row in data:
-        row = re.sub(r'[\[\]\(\):,]', r'', row)
-        row_split = row.split(' ')[0::2]
-        dataset.append(', '.join(row_split))
-    return dataset
-
-def processMatrix(data):
-    dataset = []
-    for row in data:
-        row = re.sub(r'[\[\]\(\):,]', r'', row)
-        row_split = row.split(' ')
-        dataset.append(', '.join(row_split))
-    return dataset
-
-def toCSV(data):
-    file_path = '../bert_data/data_from_bert_processed/' + programa + '.csv'
-    df = pd.DataFrame(data, columns=['text'])
-    df.to_csv(os.path.relpath(file_path, cur_path), index=False, header=None, sep='\t', doublequote=False, quoting=csv.QUOTE_NONE)
-
-#data = parseDataset(dataset_file)
-#dataa = process_with_pandas(data)
-#print(dataa)
-#data_for_visualize = processMatrix(data)
-#toCSV(data_for_visualize)
 process_with_pandas(dataset_file)
